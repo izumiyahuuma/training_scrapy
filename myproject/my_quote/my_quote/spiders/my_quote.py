@@ -6,7 +6,8 @@ https://quotes.toscrape.com/
 
 import scrapy
 import logging
-from my_quote.items import MyQuoteItem
+from my_quote.items import MyQuoteItem, MyQuoteItemLoader
+from scrapy.loader import ItemLoader
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -30,12 +31,18 @@ class MyQuote(scrapy.Spider):
         quote_boxes: list[scrapy.selector.Selector] = response.xpath(QUOTE_XPATHS['quote_boxes'])
         for index, box in enumerate(quote_boxes):
             logger.info(f'get {index + 1} / {len(quote_boxes)} quote.')
+
             quote: str = box.xpath('./span[1]/text()').get()
             author: str = box.xpath('./span[2]/small/text()').get()
             tags: list[str] = box.xpath('./div/a/text()').getall()
 
-            # TODO item処理
-            item = MyQuoteItem(quote=quote, author=author, tags=tags)
+            # loader = ItemLoader(item=MyQuoteItem(), selector=box)
+            loader = MyQuoteItemLoader(item=MyQuoteItem(), selector=box)
+            loader.add_xpath('quote', './span[1]/text()')
+            loader.add_xpath('author', './span[2]/small/text()')
+            loader.add_xpath('tags', './div/a/text()')
+
+            logger.info(loader.load_item())
 
         next_link: str = self.search_next_page_link(response)
         if next_link is not None:
