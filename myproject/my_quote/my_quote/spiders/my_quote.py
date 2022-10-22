@@ -7,9 +7,8 @@ https://quotes.toscrape.com/
 import scrapy
 import logging
 from my_quote.items import MyQuoteItem, MyQuoteItemLoader
-from scrapy.loader import ItemLoader
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("my_quote")
 logger.setLevel(logging.INFO)
 
 QUOTE_XPATHS: dict = {
@@ -36,7 +35,6 @@ class MyQuote(scrapy.Spider):
             author: str = box.xpath('./span[2]/small/text()').get()
             tags: list[str] = box.xpath('./div/a/text()').getall()
 
-            # loader = ItemLoader(item=MyQuoteItem(), selector=box)
             loader = MyQuoteItemLoader(item=MyQuoteItem(), selector=box)
             loader.add_xpath('quote', './span[1]/text()')
             loader.add_xpath('author', './span[2]/small/text()')

@@ -40,3 +40,5 @@ itemのプロパティ名_in → input processor
 itemのプロパティ名_out → output processor  
 
 関数を指定することで独自のものも実行できるみたい  
+
+# Item Pipeline

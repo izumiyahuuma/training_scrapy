@@ -6,8 +6,13 @@
 
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
+import logging
+
+logger = logging.getLogger("my_quote")
+logger.setLevel(logging.INFO)
 
 
 class MyQuotePipeline:
     def process_item(self, item, spider):
+        logger.info(item)
         return item
