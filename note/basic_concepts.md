@@ -44,4 +44,22 @@ itemのプロパティ名_out → output processor
 ## Price validation and dropping items with no prices
 
 Exceptionの項目でも出てくるけど、  
- ``raise DropItem()`` を呼び出すとそのitemは処理しないことが可能。  
+ `raise DropItem()` を呼び出すとそのitemは処理しないことが可能。  
+
+# Feed Exports
+スクレイピングした結果を外部へファイル提供とかしたい時に使える機能。  
+デフォルトでそういう機能が備わっているので、わざわざファイル書き込みの処理をコーディングしなくてもいいとか。
+- `settings.py` に指定された設定を記載する。
+  - ここらへんかな？
+  - https://docs.scrapy.org/en/latest/topics/feed-exports.html#feeds
+- 各出力方法に対応した `ItemExporters` クラスを使う。
+
+また保存先も選べるとか(ローカルはもちろん、S3,GCSなどなど)。
+
+# Requests and Responses
+## Request fingerprints
+scrapyが過去に収集したページに再度アクセスしないようにするための機構を持っているクラス。  
+これがあるおかげで Aページ→Bページ→Aページ→Bページ みたいな無限ループすることを防いでくれる。
+
+
+
