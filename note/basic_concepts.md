@@ -1,6 +1,5 @@
-items,item_loaderの備忘録  
-https://docs.scrapy.org/en/latest/topics/items.html  
-https://docs.scrapy.org/en/latest/topics/loaders.html
+BASIC CONCEPTSの備忘録  
+https://docs.scrapy.org/en/latest/index.html#basic-concepts  
 
 # Items
 ## Item Types
@@ -42,3 +41,7 @@ itemのプロパティ名_out → output processor
 関数を指定することで独自のものも実行できるみたい  
 
 # Item Pipeline
+## Price validation and dropping items with no prices
+
+Exceptionの項目でも出てくるけど、  
+ ``raise DropItem()`` を呼び出すとそのitemは処理しないことが可能。  
