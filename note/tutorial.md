@@ -1,7 +1,6 @@
-# 覚書
 ドキュメント読み込みつつ、メモ程度に残しとく。
 
-# tutorial
+tutorialの備忘録
 https://docs.scrapy.org/en/latest/intro/tutorial.html
 
 ## How to run our spider

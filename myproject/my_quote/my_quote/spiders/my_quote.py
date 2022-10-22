@@ -6,6 +6,8 @@ https://quotes.toscrape.com/
 
 import scrapy
 import logging
+from scrapy.linkextractors.lxmlhtml import LxmlLinkExtractor
+from scrapy.link import Link
 from my_quote.items import MyQuoteItem, MyQuoteItemLoader
 
 logger = logging.getLogger(__name__)
@@ -18,7 +20,8 @@ QUOTE_XPATHS: dict = {
 
 
 class MyQuote(scrapy.Spider):
-    name = 'my_quote'
+    name: str = 'my_quote'
+    link_extractor: LxmlLinkExtractor = LxmlLinkExtractor()
 
     def start_requests(self):
         url: str = "https://quotes.toscrape.com/"
@@ -41,9 +44,15 @@ class MyQuote(scrapy.Spider):
             loader.add_xpath('tags', './div/a/text()')
             yield loader.load_item()
 
-        next_link: str = self.search_next_page_link(response)
-        if next_link is not None:
-            yield response.follow(next_link, self.parse)
+        links: list[Link] = self.link_extractor.extract_links(response)
+        for link in links:
+            if 'Next' in link.text:
+                yield response.follow(link.url, self.parse)
+
+        # タグ要素とかで判断したいならxpath使って判定していく方が良さげ
+        # next_link: str = self.search_next_page_link(response)
+        # if next_link is not None:
+        #     yield response.follow(next_link, self.parse)
 
     @staticmethod
     def search_next_page_link(response: scrapy.http.Response) -> str:
