@@ -8,7 +8,7 @@ import scrapy
 import logging
 from my_quote.items import MyQuoteItem, MyQuoteItemLoader
 
-logger = logging.getLogger("my_quote")
+logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 QUOTE_XPATHS: dict = {
@@ -31,16 +31,15 @@ class MyQuote(scrapy.Spider):
         for index, box in enumerate(quote_boxes):
             logger.info(f'get {index + 1} / {len(quote_boxes)} quote.')
 
-            quote: str = box.xpath('./span[1]/text()').get()
-            author: str = box.xpath('./span[2]/small/text()').get()
-            tags: list[str] = box.xpath('./div/a/text()').getall()
+            # quote: str = box.xpath('./span[1]/text()').get()
+            # author: str = box.xpath('./span[2]/small/text()').get()
+            # tags: list[str] = box.xpath('./div/a/text()').getall()
 
             loader = MyQuoteItemLoader(item=MyQuoteItem(), selector=box)
             loader.add_xpath('quote', './span[1]/text()')
             loader.add_xpath('author', './span[2]/small/text()')
             loader.add_xpath('tags', './div/a/text()')
-
-            logger.info(loader.load_item())
+            yield loader.load_item()
 
         next_link: str = self.search_next_page_link(response)
         if next_link is not None:
